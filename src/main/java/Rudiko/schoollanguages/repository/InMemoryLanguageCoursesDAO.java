@@ -20,16 +20,16 @@ public class InMemoryLanguageCoursesDAO{
         return course;
     }
 
-    public LanguageCourse findByTitle(String title) {
+    public LanguageCourse findById(Long id) {
         return COURSES.stream()
-                .filter(course -> course.getTitle().equals(title))
+                .filter(course -> course.getId().equals(id))
                 .findFirst()
                 .orElse(null);
     }
 
     public LanguageCourse updateLanguageCourses(LanguageCourse course) {
         var courseIndex = IntStream.range(0, COURSES.size())
-                .filter(index -> COURSES.get(index).getTitle().equals(course.getTitle()))
+                .filter(index -> COURSES.get(index).getId().equals(course.getId()))
                 .findFirst()
                 .orElse(-1);
         if (courseIndex > -1){
@@ -39,8 +39,8 @@ public class InMemoryLanguageCoursesDAO{
         return null;
     }
 
-    public void deleteLanguageCourse(String title) {
-        var course = findByTitle(title);
+    public void deleteLanguageCourse(Long id) {
+        var course = findById(id);
         if (course != null) COURSES.remove(course);
     }
 }

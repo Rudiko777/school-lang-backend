@@ -11,6 +11,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/api/v1/languageCourses")
 @AllArgsConstructor
+@CrossOrigin(origins = "http://localhost:3000")
 public class LanguageCourseController {
     private final LanguageCourseService serviceLanguageCourse;
 
@@ -24,9 +25,9 @@ public class LanguageCourseController {
         return serviceLanguageCourse.saveLangCourse(course);
     }
 
-    @GetMapping("/{title}")
-    public LanguageCourse findByTitle(@PathVariable("title") String title){
-        return serviceLanguageCourse.findByTitle(title);
+    @GetMapping("/{id}")
+    public LanguageCourse findById(@PathVariable("id") Long id){
+        return serviceLanguageCourse.findById(id);
     }
 
     @PutMapping("update_courses")
@@ -34,8 +35,8 @@ public class LanguageCourseController {
         return serviceLanguageCourse.updateLanguageCourses(course);
     }
 
-    @DeleteMapping("delete_course/{title}")
-    public void deleteLanguageCourse(@PathVariable("title") String title){
-        serviceLanguageCourse.deleteLanguageCourse(title);
+    @DeleteMapping("delete_course/{id}")
+    public void deleteLanguageCourse(@PathVariable("id") Long id){
+        serviceLanguageCourse.deleteLanguageCourse(id);
     }
 }

@@ -9,7 +9,7 @@ import java.util.List;
 public interface LanguageCourseService {
     List<LanguageCourse> findAllLanguageCourses();
     LanguageCourse saveLangCourse(LanguageCourse course);
-    LanguageCourse findByTitle(String title);
+    LanguageCourse findById(Long id);
     LanguageCourse updateLanguageCourses(LanguageCourse course);
-    void deleteLanguageCourse(String title);
+    void deleteLanguageCourse(Long id);
 }

@@ -24,8 +24,8 @@ public class InMemoryLanguageCourseServiceImpl implements LanguageCourseService 
     }
 
     @Override
-    public LanguageCourse findByTitle(String title) {
-        return repository.findByTitle(title);
+    public LanguageCourse findById(Long id) {
+        return repository.findById(id);
     }
 
     @Override
@@ -34,7 +34,7 @@ public class InMemoryLanguageCourseServiceImpl implements LanguageCourseService 
     }
 
     @Override
-    public void deleteLanguageCourse(String title) {
-        repository.deleteLanguageCourse(title);
+    public void deleteLanguageCourse(Long id) {
+        repository.deleteLanguageCourse(id);
     }
 }

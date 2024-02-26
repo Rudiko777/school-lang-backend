@@ -27,8 +27,8 @@ public class LanguageCourseServiceImpl implements LanguageCourseService{
     }
 
     @Override
-    public LanguageCourse findByTitle(String title) {
-        return repository.findLanguageCourseByTitle(title);
+    public LanguageCourse findById(Long id) {
+        return repository.findLanguageCourseById(id);
     }
 
     @Override
@@ -38,7 +38,7 @@ public class LanguageCourseServiceImpl implements LanguageCourseService{
 
     @Override
     @Transactional
-    public void deleteLanguageCourse(String title) {
-        repository.deleteByTitle(title);
+    public void deleteLanguageCourse(Long id) {
+        repository.deleteById(id);
     }
 }

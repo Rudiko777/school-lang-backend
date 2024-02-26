@@ -10,9 +10,9 @@ import lombok.Data;
 public class LanguageCourse {
     @Id
     @GeneratedValue
+    @Column(unique = true)
     private Long id;
     private String language;
-    @Column(unique = true)
     private String title;
     private String level;
     private int duration;
