@@ -11,8 +11,5 @@ public class SchoolLanguagesApplication {
 	public static void main(String[] args) {
 		SpringApplication.run(SchoolLanguagesApplication.class, args);
 	}
-	@Bean
-	public BCryptPasswordEncoder bCryptPasswordEncoder() {
-		return new BCryptPasswordEncoder();
-	}
+
 }

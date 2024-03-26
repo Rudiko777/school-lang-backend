@@ -26,8 +26,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     UserRepository userRepository;
     @Autowired
     RoleRepository roleRepository;
-    @Autowired
-    BCryptPasswordEncoder bCryptPasswordEncoder;
+
 
     @Override
     public User findUserById(Long userId) {
@@ -49,7 +48,7 @@ public class UserServiceImpl implements UserDetailsService, UserService {
         }
 
         user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
-        user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
+        user.setPassword(user.getPassword());
         userRepository.save(user);
         return true;
     }

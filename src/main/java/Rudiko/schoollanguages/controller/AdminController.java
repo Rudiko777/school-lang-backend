@@ -1,6 +1,7 @@
 package Rudiko.schoollanguages.controller;
 
 import Rudiko.schoollanguages.service.UserService;
+import Rudiko.schoollanguages.service.impl.UserServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -22,8 +23,7 @@ public class AdminController {
 
     @PostMapping("/admin")
     public String  deleteUser(@RequestParam(required = true, defaultValue = "" ) Long userId,
-                              @RequestParam(required = true, defaultValue = "" ) String action,
-                              Model model) {
+                              @RequestParam(required = true, defaultValue = "" ) String action) {
         if (action.equals("delete")){
             userService.deleteUser(userId);
         }
