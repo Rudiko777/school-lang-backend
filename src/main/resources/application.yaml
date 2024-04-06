@@ -13,3 +13,9 @@ spring:
     properties:
       hibernate:
         format_sql: true
+  main:
+    allow-circular-references: true
+
+jwt:
+  secret: huyf7sa87fda7fga7gfdgfguaf2hf8heuihfagoih34
+  lifetime: 30m
