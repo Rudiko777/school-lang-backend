@@ -39,6 +39,7 @@ public class WebSecurityConfig{
     public void setUserService(UserServiceImpl userService) {
         this.userService = userService;
     }
+
     @Autowired
     public void setJwtRequestFilter(JwtRequestFilter jwtRequestFilter) {this.jwtRequestFilter = jwtRequestFilter;}
 
@@ -46,7 +47,6 @@ public class WebSecurityConfig{
     public BCryptPasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
     }
-
 
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
@@ -77,7 +77,9 @@ public class WebSecurityConfig{
             .logout(logout -> logout
                     .permitAll()
                     .logoutSuccessUrl("/")
-            );
+            )
+        ;
+
 
         return http.build();
     };

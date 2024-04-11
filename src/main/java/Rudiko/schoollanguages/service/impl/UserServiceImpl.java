@@ -55,13 +55,13 @@ public class UserServiceImpl implements UserDetailsService, UserService {
 
     @Override
     public boolean saveUser(User user) {
-        User userFromDB = userRepository.findByUsername(user.getUsername());
+        User userFromDB = userRepository.findByFullName(user.getFullName());
 
         if (userFromDB != null) {
             return false;
         }
 
-        user.setRoles(Collections.singleton(new Role(1L, "ROLE_USER")));
+        user.setRoles(Collections.singleton(new Role(2L, "ROLE_ADMIN")));
         user.setPassword(bCryptPasswordEncoder.encode(user.getPassword()));
         userRepository.save(user);
         return true;
@@ -83,8 +83,8 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        User user = userRepository.findByUsername(username);
+    public UserDetails loadUserByUsername(String fullName) throws UsernameNotFoundException {
+        User user = userRepository.findByFullName(fullName);
 
         if (user == null) {
             throw new UsernameNotFoundException("User not found");

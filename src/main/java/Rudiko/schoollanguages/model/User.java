@@ -20,44 +20,27 @@ public class User implements UserDetails {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    @Column(name = "fullName")
     @Size(min = 2, message = "Не меньше 5 знаков")
-    private String username;
+    private String fullName;
     @Size(min = 2, message = "Не меньше 5 знаков")
     private String password;
+    @Column(name = "phoneNumber")
+    private String phoneNumber;
+    @Column(name = "email")
+    private String email;
+    @Column(name = "gender")
+    private String gender;
+    @Column(name = "login")
+    private String login;
+    @Column(name = "birthday")
+    private String birthday;
     @Transient
     private String passwordConfirm;
     @ManyToMany(fetch = FetchType.EAGER)
     private Set<Role> roles;
 
     public User() {}
-//    public void setPassword(String password) {
-//        this.password = password;
-//    }
-//
-//    public String getPasswordConfirm() {
-//        return passwordConfirm;
-//    }
-//
-//    public void setPasswordConfirm(String passwordConfirm) {
-//        this.passwordConfirm = passwordConfirm;
-//    }
-//
-//    public Set<Role> getRoles() {
-//        return roles;
-//    }
-//
-//    public void setRoles(Set<Role> roles) {
-//        this.roles = roles;
-//    }
-//
-//    public Long getId() {
-//        return id;
-//    }
-//
-//    public void setId(Long id) {
-//        this.id = id;
-//    }
-
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
@@ -71,7 +54,7 @@ public class User implements UserDetails {
 
     @Override
     public String getUsername() {
-        return username;
+        return fullName;
     }
 
     @Override
