@@ -3,8 +3,10 @@ package Rudiko.schoollanguages.controller;
 import Rudiko.schoollanguages.dtos.JwtRequest;
 import Rudiko.schoollanguages.dtos.JwtResponse;
 import Rudiko.schoollanguages.dtos.RegistrationUserDto;
+import Rudiko.schoollanguages.dtos.UserDTO;
 import Rudiko.schoollanguages.exceptions.AppError;
 import Rudiko.schoollanguages.model.User;
+import Rudiko.schoollanguages.service.AuthService;
 import Rudiko.schoollanguages.service.UserService;
 import Rudiko.schoollanguages.service.impl.UserServiceImpl;
 import Rudiko.schoollanguages.utils.JwtTokenUtils;
@@ -17,6 +19,7 @@ import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -27,37 +30,22 @@ import javax.validation.Valid;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("api/v1/apps")
+@CrossOrigin(origins = "http://localhost:3000")
 public class RegistrationController {
-    private final UserServiceImpl userService;
-    private final JwtTokenUtils jwtTokenUtils;
-    private final AuthenticationManager authenticationManager;
+    private final AuthService authService;
 
     @GetMapping("/welcome")
     public String welcome(){
         return "Welcome to auth approach";
     }
 
-
     @PostMapping("/registration")
-    public ResponseEntity<?> addUser(@RequestBody User userForm) {
-        if (!userForm.getPassword().equals(userForm.getPasswordConfirm())){
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароли не совпадают"), HttpStatus.BAD_REQUEST);
-        }
-        if (!userService.saveUser(userForm)){
-            return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с указанным именем уже существует"), HttpStatus.BAD_REQUEST);
-        }
-        return ResponseEntity.ok(new RegistrationUserDto(userForm.getUsername(), userForm.getPassword(), userForm.getPasswordConfirm()));
+    public ResponseEntity<?> addUser(@ModelAttribute RegistrationUserDto registrationUserDto) {
+        return authService.addUser(registrationUserDto);
     }
 
     @PostMapping("/auth")
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest){
-        try {
-            authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(authRequest.getFullName(), authRequest.getPassword()));
-        } catch (BadCredentialsException e){
-            return new ResponseEntity<>(new AppError(HttpStatus.UNAUTHORIZED.value(), "Неправильный логин или пароль"), HttpStatus.UNAUTHORIZED);
-        }
-        UserDetails userDetails = userService.loadUserByUsername(authRequest.getFullName());
-        String token = jwtTokenUtils.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token));
+        return authService.createAuthToken(authRequest);
     }
 }

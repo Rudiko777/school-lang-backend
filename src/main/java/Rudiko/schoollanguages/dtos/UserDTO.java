@@ -2,10 +2,10 @@ package Rudiko.schoollanguages.dtos;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import lombok.RequiredArgsConstructor;
 
 @Data
-public class RegistrationUserDto {
+@AllArgsConstructor
+public class UserDTO {
     private String fullName;
     private String password;
     private String confirmPassword;

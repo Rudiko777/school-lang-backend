@@ -1,6 +1,6 @@
 spring:
   datasource:
-    url: jdbc:postgresql://localhost:5432/school_lang_db
+    url: jdbc:postgresql://localhost:5433/school_lang_db
     username: postgres
     password: papamama1R
     driver-class-name: org.postgresql.Driver
@@ -13,8 +13,8 @@ spring:
     properties:
       hibernate:
         format_sql: true
-  main:
-    allow-circular-references: true
+#  main:
+#    allow-circular-references: true
 
 jwt:
   secret: huyf7sa87fda7fga7gfdgfguaf2hf8heuihfagoih34
