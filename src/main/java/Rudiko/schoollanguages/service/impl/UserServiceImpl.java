@@ -1,6 +1,7 @@
 package Rudiko.schoollanguages.service.impl;
 
 import Rudiko.schoollanguages.dtos.RegistrationUserDto;
+import Rudiko.schoollanguages.model.LanguageCourse;
 import Rudiko.schoollanguages.model.Role;
 import Rudiko.schoollanguages.model.User;
 import Rudiko.schoollanguages.repository.RoleRepository;
@@ -11,7 +12,11 @@ import jakarta.persistence.EntityManager;
 import jakarta.persistence.PersistenceContext;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -20,10 +25,8 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.Collections;
-import java.util.List;
-import java.util.Optional;
-import java.util.Set;
+import java.security.Principal;
+import java.util.*;
 import java.util.stream.Collectors;
 
 @Service
@@ -47,6 +50,59 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     @Autowired
     public void setbCryptPasswordEncoder(BCryptPasswordEncoder bCryptPasswordEncoder) {
         this.bCryptPasswordEncoder = bCryptPasswordEncoder;
+    }
+
+    @Override
+    public User getCurrentUser(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        String fullName = (String) authentication.getPrincipal();
+        return userRepository.findByFullName(fullName);
+    }
+
+    @Override
+    public void addLanguageCourseToUser(Long userId, Long languageCourseId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+
+        User user = optionalUser.get();
+
+        List<Long> languageCourses = user.getLanguageCourses();
+        if (languageCourses == null) {
+            languageCourses = new ArrayList<>();
+        }
+        if (languageCourses.contains(languageCourseId)){
+            return;
+        }
+
+        languageCourses.add(languageCourseId);
+        user.setLanguageCourses(languageCourses);
+
+        userRepository.save(user);
+    }
+
+    @Override
+    @Transactional
+    public ResponseEntity<?> deleteLanguageCourseOfUser(Long userId, Long languageCourseId) {
+        Optional<User> optionalUser = userRepository.findById(userId);
+        if (optionalUser.isEmpty()) {
+            throw new RuntimeException("User not found");
+        }
+
+        User user = optionalUser.get();
+
+        List<Long> languageCourses = user.getLanguageCourses();
+        if (languageCourses == null) {
+            languageCourses = new ArrayList<>();
+        }
+
+        languageCourses.remove(languageCourseId);
+        user.setLanguageCourses(languageCourses);
+
+        userRepository.save(user);
+        return ResponseEntity.ok().body("Response Body");
     }
 
     @Override
@@ -92,14 +148,14 @@ public class UserServiceImpl implements UserDetailsService, UserService {
     }
 
     @Override
-    public Optional<User> findByFullName(String fullName) {
+    public User findByFullName(String fullName) {
         return userRepository.findByFullName(fullName);
     }
 
     @Override
     @Transactional
     public UserDetails loadUserByUsername(String fullName) throws UsernameNotFoundException {
-        User user = findByFullName(fullName).orElseThrow(() -> new UsernameNotFoundException("User not found"));
+        User user = findByFullName(fullName);
         return new org.springframework.security.core.userdetails.User(
                 user.getUsername(),
                 user.getPassword(),

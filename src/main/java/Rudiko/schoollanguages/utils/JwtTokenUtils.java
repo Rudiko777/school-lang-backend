@@ -1,8 +1,11 @@
 package Rudiko.schoollanguages.utils;
 
+import Rudiko.schoollanguages.model.User;
+import Rudiko.schoollanguages.repository.UserRepository;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +19,10 @@ import java.util.Map;
 import java.util.stream.Collectors;
 
 @Component
+@RequiredArgsConstructor
 public class JwtTokenUtils {
+    private final UserRepository userRepository;
+
     @Value("${jwt.secret}")
     private String secret;
 
@@ -24,10 +30,13 @@ public class JwtTokenUtils {
     private Duration jwtLifetime;
 
     public String generateToken(UserDetails userDetails){
+        User user = userRepository.findByFullName(userDetails.getUsername());
+        List<Long> languageCourses = user.getLanguageCourses();
         Map<String, Object> claims = new HashMap<>();
         List<String> roleList = userDetails.getAuthorities().stream()
                 .map(GrantedAuthority::getAuthority).collect(Collectors.toList());
         claims.put("roles", roleList);
+        claims.put("courses", languageCourses);
         Date issuedDate = new Date();
         Date expiredDate = new Date(issuedDate.getTime() + jwtLifetime.toMillis());
         return Jwts.builder()

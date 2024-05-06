@@ -2,7 +2,10 @@ package Rudiko.schoollanguages.controller;
 
 
 import Rudiko.schoollanguages.model.TargetAudience;
+import Rudiko.schoollanguages.model.User;
 import Rudiko.schoollanguages.service.TargetAudienceService;
+import Rudiko.schoollanguages.service.impl.UserServiceImpl;
+import Rudiko.schoollanguages.utils.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
 import org.springframework.core.io.Resource;
 import org.springframework.core.io.UrlResource;
@@ -19,6 +22,7 @@ import java.io.IOException;
 import java.security.Principal;
 import java.util.Base64;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
 
 @RestController
@@ -26,6 +30,8 @@ import java.util.UUID;
 @CrossOrigin(origins = "http://localhost:3000")
 public class MainController {
     private final TargetAudienceService targetAudienceService;
+    private final UserServiceImpl userService;
+    private final JwtTokenUtils jwtTokenUtils;
 
     @GetMapping("/unsecured")
     public String unsecuredData(){
@@ -72,5 +78,10 @@ public class MainController {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).build();
         }
+    }
+
+    @GetMapping("/currentUser")
+    public User getCurrentUser(){
+        return userService.getCurrentUser();
     }
 }

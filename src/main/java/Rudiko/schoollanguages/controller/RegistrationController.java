@@ -26,6 +26,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
+import java.util.List;
 
 @RequiredArgsConstructor
 @RestController
@@ -33,6 +34,7 @@ import javax.validation.Valid;
 @CrossOrigin(origins = "http://localhost:3000")
 public class RegistrationController {
     private final AuthService authService;
+    private final JwtTokenUtils jwtTokenUtils;
 
     @GetMapping("/welcome")
     public String welcome(){
@@ -47,5 +49,11 @@ public class RegistrationController {
     @PostMapping("/auth")
     public ResponseEntity<?> createAuthToken(@RequestBody JwtRequest authRequest){
         return authService.createAuthToken(authRequest);
+    }
+
+    @GetMapping("/roles")
+    public List<String> getUserRoles(@RequestHeader("Authorization") String token) {
+        token = token.replace("Bearer ", "");
+        return jwtTokenUtils.getRoles(token);
     }
 }

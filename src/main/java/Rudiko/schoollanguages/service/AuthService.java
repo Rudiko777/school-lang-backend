@@ -32,7 +32,7 @@ public class AuthService{
         if (!registrationUserDto.getPassword().equals(registrationUserDto.getConfirmPassword())){
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пароли не совпадают"), HttpStatus.BAD_REQUEST);
         }
-        if (userService.findByFullName(registrationUserDto.getFullName()).isPresent()){
+        if (userService.findByFullName(registrationUserDto.getFullName()) != null){
             return new ResponseEntity<>(new AppError(HttpStatus.BAD_REQUEST.value(), "Пользователь с указанным именем уже существует"), HttpStatus.BAD_REQUEST);
         }
         User user = userService.saveUser(registrationUserDto);
@@ -59,6 +59,11 @@ public class AuthService{
         }
         UserDetails userDetails = userService.loadUserByUsername(authRequest.getFullName());
         String token = jwtTokenUtils.generateToken(userDetails);
-        return ResponseEntity.ok(new JwtResponse(token));
+        User user = userService.findByFullName(authRequest.getFullName());
+        return ResponseEntity.ok(new JwtResponse(token, user));
+    }
+
+    public ResponseEntity<?> checkRoles(String token){
+        return ResponseEntity.ok(jwtTokenUtils.getRoles(token));
     }
 }
