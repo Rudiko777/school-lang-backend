@@ -1,15 +1,22 @@
 package Rudiko.schoollanguages.controller;
 
+import Rudiko.schoollanguages.dtos.FilterCourseDto;
+import Rudiko.schoollanguages.exceptions.AppError;
 import Rudiko.schoollanguages.model.LanguageCourse;
-import Rudiko.schoollanguages.model.User;
+import Rudiko.schoollanguages.model.Module;
+import Rudiko.schoollanguages.model.Review;
+import Rudiko.schoollanguages.repository.LanguageCourseRepository;
 import Rudiko.schoollanguages.service.LanguageCourseService;
 import Rudiko.schoollanguages.service.impl.UserServiceImpl;
 import lombok.AllArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
+import java.util.logging.Filter;
 
 @RestController
 @RequestMapping("/api/v1/languageCourses")
@@ -17,17 +24,32 @@ import java.util.List;
 @CrossOrigin(origins = "http://localhost:3000")
 public class LanguageCourseController {
     private final LanguageCourseService serviceLanguageCourse;
-    private final UserServiceImpl userService;
 
     @GetMapping
     public List<LanguageCourse> findAllLanguageCourses(){
         return serviceLanguageCourse.findAllLanguageCourses();
     }
 
+    @PostMapping("filter")
+    public List<LanguageCourse> filterLangCourses(@RequestBody FilterCourseDto courseDto){
+        return serviceLanguageCourse.filterLangCourses(courseDto);
+    }
+
     @PostMapping("save_course")
     public LanguageCourse saveLangCourse(@RequestBody LanguageCourse course){
         return serviceLanguageCourse.saveLangCourse(course);
     }
+
+    @PostMapping("/addModule/{courseId}")
+    public ResponseEntity<?> addModuleToCourse(@PathVariable Long courseId, @RequestBody Module module) {
+        return serviceLanguageCourse.addModuleToCourse(courseId, module);
+    }
+
+    @PostMapping("/addReview/{courseId}")
+    public ResponseEntity<?> addReviewToCourse(@PathVariable Long courseId, @RequestBody Review review) {
+        return serviceLanguageCourse.addReviewToCourse(courseId, review);
+    }
+
 
     @GetMapping("/{id}")
     public LanguageCourse findById(@PathVariable("id") Long id){
@@ -36,15 +58,7 @@ public class LanguageCourseController {
 
     @GetMapping("/find-by-ids/{id}")
     public List<LanguageCourse> findLanguageCoursesByIds(@PathVariable("id") Long id) {
-        List<Long> indexes = userService.findUserById(id).getLanguageCourses();
-        List<LanguageCourse> languageCourses = new ArrayList<>();
-        for (Long i : indexes) {
-            LanguageCourse languageCourse = serviceLanguageCourse.findById(i);
-            if (languageCourse != null) {
-                languageCourses.add(languageCourse);
-            }
-        }
-        return languageCourses;
+        return serviceLanguageCourse.findLanguageCoursesByIds(id);
     }
 
     @PutMapping("update_courses")

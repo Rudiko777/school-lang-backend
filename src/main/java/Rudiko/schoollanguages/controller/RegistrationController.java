@@ -1,31 +1,13 @@
 package Rudiko.schoollanguages.controller;
 
 import Rudiko.schoollanguages.dtos.JwtRequest;
-import Rudiko.schoollanguages.dtos.JwtResponse;
 import Rudiko.schoollanguages.dtos.RegistrationUserDto;
-import Rudiko.schoollanguages.dtos.UserDTO;
-import Rudiko.schoollanguages.exceptions.AppError;
-import Rudiko.schoollanguages.model.User;
-import Rudiko.schoollanguages.service.AuthService;
-import Rudiko.schoollanguages.service.UserService;
-import Rudiko.schoollanguages.service.impl.UserServiceImpl;
+import Rudiko.schoollanguages.service.impl.AuthServiceImpl;
 import Rudiko.schoollanguages.utils.JwtTokenUtils;
-import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
-import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -33,7 +15,7 @@ import java.util.List;
 @RequestMapping("api/v1/apps")
 @CrossOrigin(origins = "http://localhost:3000")
 public class RegistrationController {
-    private final AuthService authService;
+    private final AuthServiceImpl authService;
     private final JwtTokenUtils jwtTokenUtils;
 
     @GetMapping("/welcome")

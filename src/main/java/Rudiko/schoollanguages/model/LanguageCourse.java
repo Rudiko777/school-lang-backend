@@ -4,6 +4,8 @@ import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name = "courses")
@@ -18,4 +20,12 @@ public class LanguageCourse {
     private int duration;
     private int quantityModules;
     private int price;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_id")
+    private List<Module> modules;
+
+    @OneToMany(cascade = CascadeType.ALL)
+    @JoinColumn(name = "course_id")
+    private List<Review> reviews;
 }

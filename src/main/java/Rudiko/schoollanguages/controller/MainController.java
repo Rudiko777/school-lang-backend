@@ -3,7 +3,7 @@ package Rudiko.schoollanguages.controller;
 
 import Rudiko.schoollanguages.model.TargetAudience;
 import Rudiko.schoollanguages.model.User;
-import Rudiko.schoollanguages.service.TargetAudienceService;
+import Rudiko.schoollanguages.service.impl.TargetAudienceServiceImpl;
 import Rudiko.schoollanguages.service.impl.UserServiceImpl;
 import Rudiko.schoollanguages.utils.JwtTokenUtils;
 import lombok.RequiredArgsConstructor;
@@ -13,23 +13,20 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
-import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.security.Principal;
 import java.util.Base64;
 import java.util.List;
-import java.util.Optional;
 import java.util.UUID;
 
 @RestController
 @RequiredArgsConstructor
 @CrossOrigin(origins = "http://localhost:3000")
 public class MainController {
-    private final TargetAudienceService targetAudienceService;
+    private final TargetAudienceServiceImpl targetAudienceService;
     private final UserServiceImpl userService;
     private final JwtTokenUtils jwtTokenUtils;
 

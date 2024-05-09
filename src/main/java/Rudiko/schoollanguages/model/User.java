@@ -50,10 +50,8 @@ public class User implements UserDetails {
     @ManyToMany(fetch = FetchType.EAGER)
     private List<Role> roles;
 
-
     @ElementCollection
     private List<Long> languageCourses;
-
 
     public User() {}
 
