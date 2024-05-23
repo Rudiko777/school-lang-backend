@@ -15,4 +15,14 @@ public class Module {
 
     @Column(name = "description")
     private String description;
+
+    public Module(String title, String description, Long id){
+        this.id = id;
+        this.title = title;
+        this.description = description;
+    }
+
+    public Module() {
+
+    }
 }

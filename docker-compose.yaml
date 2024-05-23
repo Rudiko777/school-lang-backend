@@ -1,0 +1,26 @@
+version: '3.1'
+
+services:
+  postgresql:
+    container_name: 'postgresql-image'
+    image: postgres:15.0
+    environment:
+      - POSTGRES_ROOT_PASSWORD=papamama1R
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=papamama1R
+      - POSTGRES_DATABASE=school_lang_db
+    ports:
+      - "6504:5433"
+  spring-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8808:8080"
+    depends_on:
+      - postgresql
+    environment:
+      SPRING_DATASOURCE_URL: "jdbc:postgresql://postgresql:5433/school_lang_db"
+
+volumes:
+  pg_school_lang_db:

@@ -3,6 +3,7 @@ package Rudiko.schoollanguages.model;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Data;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
@@ -28,4 +29,14 @@ public class LanguageCourse {
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "course_id")
     private List<Review> reviews;
+
+    public LanguageCourse(Long id, String language, String level) {
+        this.id = id;
+        this.language = language;
+        this.level = level;
+    }
+
+    public LanguageCourse() {
+
+    }
 }

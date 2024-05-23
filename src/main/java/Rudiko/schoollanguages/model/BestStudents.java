@@ -22,7 +22,7 @@ public class BestStudents {
     @Column(name = "score")
     private Long score;
 
-    @OneToMany(cascade = CascadeType.ALL)
+    @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(name = "best_students_modules",
             joinColumns = @JoinColumn(name = "best_student_id"),
             inverseJoinColumns = @JoinColumn(name = "module_id"))

@@ -21,4 +21,15 @@ public class Review {
 
     @Column(name = "description")
     private String description;
+
+    public Review(String userName, String title, Long grade, String description){
+        this.userName = userName;
+        this.title = title;
+        this.grade = grade;
+        this.description = description;
+    }
+
+    public Review() {
+
+    }
 }
