@@ -3,6 +3,8 @@ package Rudiko.schoollanguages.model;
 import jakarta.persistence.*;
 import lombok.Data;
 
+import java.util.List;
+
 @Data
 @Entity
 public class Module {
@@ -15,6 +17,14 @@ public class Module {
 
     @Column(name = "description")
     private String description;
+
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "module_best_students",
+            joinColumns = @JoinColumn(name = "module_id"),
+            inverseJoinColumns = @JoinColumn(name = "best_student_id")
+    )
+    private List<BestStudents> bestStudents;
 
     public Module(String title, String description, Long id){
         this.id = id;

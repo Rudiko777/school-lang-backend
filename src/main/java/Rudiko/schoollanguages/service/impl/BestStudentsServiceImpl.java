@@ -26,36 +26,39 @@ public class BestStudentsServiceImpl implements BestStudentsService {
         BestStudents existingStudent = bestStudentsRepository.findByFullName(student.getFullName());
         Optional<LanguageCourse> languageCourseOptional = languageCourseRepository.findById(student.getCourseId());
         LanguageCourse languageCourse = languageCourseOptional.get();
-
         Optional<Module> moduleOptional = languageCourse.getModules().stream()
                 .filter(module -> module.getId().equals(student.getIdActiveModule()))
                 .findFirst();
-
         Module module = moduleOptional.get();
-
         if (existingStudent != null) {
-            List<Module> updatedModules = existingStudent.getActiveModules();
-            if (Objects.equals(action, "plus")){
-                updatedModules.add(module);
-                existingStudent.setScore(existingStudent.getScore() + student.getScore());
+            List<Module> updatedModules = existingStudent.getModules();
+            if (Objects.equals(action, "plus")) {
+                if (!updatedModules.contains(module)) {
+                    updatedModules.add(module);
+                    existingStudent.setScore(existingStudent.getScore() + student.getScore());
+                    module.getBestStudents().add(existingStudent);
+                }
             } else if (Objects.equals(action, "minus")) {
-                updatedModules.remove(module);
-                existingStudent.setScore(existingStudent.getScore() - student.getScore());
+                if (updatedModules.contains(module)) {
+                    updatedModules.remove(module);
+                    existingStudent.setScore(existingStudent.getScore() - student.getScore());
+                    module.getBestStudents().remove(existingStudent);
+                }
             }
-            if (existingStudent.getScore() == 0){
+            if (existingStudent.getScore() == 0) {
                 bestStudentsRepository.delete(existingStudent);
                 return;
             }
-            existingStudent.setActiveModules(updatedModules);
             bestStudentsRepository.save(existingStudent);
         } else {
             List<Module> updatedModules = new ArrayList<>();
             updatedModules.add(module);
             BestStudents bestStudentsNew = new BestStudents(
-                student.getFullName(),
-                student.getScore(),
-                updatedModules
+                    student.getFullName(),
+                    student.getScore(),
+                    updatedModules
             );
+            module.getBestStudents().add(bestStudentsNew);
             bestStudentsRepository.save(bestStudentsNew);
         }
     }
