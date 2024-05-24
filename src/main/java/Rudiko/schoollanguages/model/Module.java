@@ -1,5 +1,6 @@
 package Rudiko.schoollanguages.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -18,6 +19,7 @@ public class Module {
     @Column(name = "description")
     private String description;
 
+    @JsonIgnore
     @ManyToMany(cascade = CascadeType.ALL)
     @JoinTable(
             name = "module_best_students",

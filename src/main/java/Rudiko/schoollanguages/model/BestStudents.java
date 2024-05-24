@@ -1,5 +1,6 @@
 package Rudiko.schoollanguages.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -21,7 +22,7 @@ public class BestStudents {
 
     @Column(name = "score")
     private Long score;
-
+    
     @ManyToMany(mappedBy = "bestStudents")
     private List<Module> modules;
 

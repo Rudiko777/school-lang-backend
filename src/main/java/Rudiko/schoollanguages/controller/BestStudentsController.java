@@ -29,4 +29,6 @@ public class BestStudentsController {
     public void updateBestStudents(@PathVariable String action, @RequestBody BestStudentsDto bestStudents) {
         bestStudentsService.saveOrUpdateBestStudent(bestStudents, action);
     }
+
+
 }
